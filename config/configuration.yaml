@@ -1,0 +1,102 @@
+# transformations
+transformation:
+  - add
+  - remove
+  - replace
+
+# ontology elements
+environment:
+  - rain
+  - cloud
+  - snow
+  - day
+  - night
+
+object:
+  - tree
+  - building
+  - pedestrian
+  - vehicle
+  - bicylist
+
+road_network:
+  - lane
+  - line
+  - crosswalk
+  - roadside
+
+change:
+  - increase
+  - decrease
+  - stay
+
+# transformation techniques
+engine:
+  openCV:
+    entry: generators/opencv/opencv_gen.py
+    support_transformations:
+      - add pedestrian roadside on
+      - add sign roadside on
+      - add pedestrian roadside on closer
+
+  pix2pixHD:
+    entry: generators/pix2pixHD/pix2pixHD_gen.py
+    support_transformations:
+      - remove line
+      - replace building tree object
+
+  UNIT:
+    entry: generators/UNIT/unit_gen.py
+    support_transformations:
+      - replace day night environment
+
+
+model:
+  Epoch(speed):
+    name: Epoch(speed)
+    class_name: Epoch
+    class_file: model_a2d2
+    path: models/driving_models/speed/epoch.pt
+    distributed: 0
+
+  VGG16(speed):
+    name: VGG16(speed)
+    class_name: Vgg16
+    class_file: model_a2d2
+    path: models/driving_models/speed/vgg16.pt
+    distributed: 0
+
+  Resnet101(speed):
+    name: Resnet101(speed)
+    class_name: Resnet101
+    class_file: model_a2d2
+    path: models/driving_models/speed/resnet101.pt
+    distributed: 0
+
+  Epoch(steer):
+    name: Epoch(steer)
+    class_name: EpochSingle
+    class_file: model_a2d2
+    path: models/driving_models/steer/epoch.pt
+    distributed: 0
+
+  VGG16(steer):
+    name: VGG16(steer)
+    class_name: Vgg16Single
+    class_file: model_a2d2
+    path: models/driving_models/steer/vgg16.pt
+    distributed: 0
+
+  Resnet101(steer):
+    name: Resnet101(steer)
+    class_name: build_resnet101
+    class_file: model_a2d2
+    path: models/driving_models/steer/resnet101.pt
+    distributed: 0
+
+dataset:
+  A2D2:
+    name: A2D2
+    path: /media/yao/新加卷/a2d2/camera_lidar_semantic/20180807_145028/camera/cam_front_center
+    semantic_path: /media/yao/新加卷/a2d2/camera_lidar_semantic/20180807_145028/label/cam_front_center
+    img_size: (160, 320)

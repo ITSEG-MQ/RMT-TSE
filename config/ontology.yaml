@@ -1,0 +1,79 @@
+lane:
+  direction:
+    - forward
+    - reverse
+  orientation:
+    - vertical
+    - horizontal
+  position:
+    - left
+    - right
+
+line:
+  type:
+    - solid
+    - dash
+  color:
+    - white
+    - yellow
+
+crosswalk:
+  orientation:
+    - vertical
+    - horizontal
+
+roadside:
+  position:
+    - left
+    - right
+
+sign:
+  type:
+    - stop
+    - speed
+    - turn
+
+signal:
+  color:
+    - red
+    - yellow
+    - green
+
+tree:
+
+building:
+
+vehicle:
+  type:
+    - car
+    - truck
+    - van
+    - bus
+  color:
+    - white
+    - black
+    - blue
+
+pedestrian:
+
+rain:
+  level:
+    - light
+    - normal
+    - heavy
+
+cloud:
+  level:
+    - light
+    - normal
+    - heavy
+
+snow:
+  level:
+    - light
+    - normal
+    - heavy
+
+day:
+
+night:
