@@ -48,7 +48,7 @@ class Parser:
         # token.head, token.children: dependencies
 
         for chunk in doc.noun_chunks:
-            print(chunk.text, chunk.root.text, chunk.root.dep_)
+            # print(chunk.text, chunk.root.text, chunk.root.dep_)
             if chunk.root.pos_ == "NOUN" and chunk.root.dep_ != "ROOT":
                 pos_dict["NOUN"].append((chunk.root, chunk))
 
@@ -110,7 +110,7 @@ class Parser:
             chunk = v['chunk']
             if type(self.ontology_list[v['name']]) == dict:
                 for token in chunk:
-                    print(token.text)
+                    # print(token.text)
                     if token.text != element.text:
                         for onto_property, property_vals in self.ontology_list[v['name']].items():
                             if token.text in property_vals:
@@ -130,7 +130,7 @@ class Parser:
                 #     if predicate_val[0].text in property_vals:
                 #         ontology_element_update[k][onto_property] = predicate_val[0].text
 
-        print(ontology_element_update)
+        # print(ontology_element_update)
 
         # identify transformation name
         root_verb = pos_dict['ROOT']
@@ -200,13 +200,13 @@ class Parser:
                 transformation_predicate = ('replace', ontology_element_update[predicates['nsubj'][0]]['name'],
                                             ontology_element_update[predicates['prep'][1]]['name'], 'environment')
 
-        print(transformation_predicate)
+        # print(transformation_predicate)
         return transformation_predicate
 
     def parse_then(self, sentence, phase=1):
         pos_dict = self.extract_dependency(sentence)
         change_action = self.identify_change_action(pos_dict['ROOT'].text)
-        print(change_action)
+        # print(change_action)
         change_subject = None
         change_type = None
         change_extent = None
@@ -302,12 +302,11 @@ class Parser:
         return mr
 
     def identify_change_action(self, root_verb):
-        print(root_verb)
+        # print(root_verb)
         max_sim = 0
         action = None
         for t in self.config['change']:
             sim = self.get_wup_similarity(root_verb, t, 'verb')
-            print(t, sim)
             if sim > max_sim:
                 max_sim = sim
                 action = t
@@ -315,12 +314,10 @@ class Parser:
         return action
 
     def identify_transformation(self, root_verb):
-        print(root_verb)
         max_sim = 0
         transformation = None
         for t in self.config['transformation']:
             sim = self.get_similarity(root_verb, t)
-            print(t, sim)
             if sim > max_sim:
                 max_sim = sim
                 transformation = t
@@ -331,7 +328,6 @@ class Parser:
         return transformation
 
     def identify_ontology(self, noun):
-        print(noun)
         if noun in self.ontology_list.keys():
             return noun
         else:
@@ -340,7 +336,6 @@ class Parser:
             ontology = None
             for t in self.ontology_list.keys():
                 sim = self.get_wup_similarity(noun, t)
-                print(t, sim)
                 ontology_sims[t] = sim
                 if sim > max_sim:
                     max_sim = sim
@@ -373,8 +368,6 @@ class Parser:
                 expected_change = self.parse_then(sentence, phase=i // 2 + 1)
                 mr = self.create_mr(expected_change, phase=i // 2 + 1)
                 mrs.append(mr)
-        print(transformations)
-        print(mrs)
 
         target_objects = []
         target_transformations = []
@@ -402,5 +395,4 @@ class Parser:
             else:
                 work_engines.append(None)
 
-        print(target_transformations, target_objects, target_parameters, mrs, work_engines)
         return target_transformations, target_objects, target_parameters, mrs, work_engines

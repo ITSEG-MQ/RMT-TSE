@@ -212,7 +212,7 @@ class A2D2MT(Dataset):
         self.original_data = self.get_original_data()
         self.mt_image_list = os.listdir(mt_path)
         self.mt_image_list.sort()
-        # self.mt_image_list = self.mt_image_list[1:] # remove .gitignore file
+        self.mt_image_list = self.mt_image_list[1:] # remove .gitignore file
 
     def get_original_data(self):
         label_root_folder = os.path.join(self.root_path, "bus_data")

@@ -169,40 +169,6 @@ def resize_img(dataset, x_n):
                 resize_img = cv2.resize(img, (int(dataset.img_size), int(dataset.img_size)))
                 cv2.imwrite(os.path.join("../test_images/" + x_n, d), resize_img)
 
-
-def create_mt_set(dataset, transformations, x_n):
-    if len(transformations) == 0:
-        resize_img(dataset, x_n)
-    elif len(transformations) == 1:
-        script = transformations[0].running_script
-        for param in transformations[0].params:
-            if param.check == "1":
-                script += " --%s %s" % (param.name, param.value)
-        if transformations[0].name == "ChangeScene":
-            resize_img(dataset, x_n)
-            script += " --dataset_path %s --output_path %s" % ("../test_images/" + x_n, "../test_images/" + x_n)
-            print(script)
-            os.system(script)
-        else:
-            script += " --dataset_path %s --output_path %s" % (dataset.path, "../test_images/" + x_n)
-            print(script)
-            os.system(script)
-    else:
-        for i, trans in enumerate(transformations):
-            script = trans.running_script
-            for param in trans.params:
-                if param.check == "1":
-                    script += " --%s %s" % (param.name, param.value)
-            if i == 0:
-                script += " --dataset_path %s --output_path %s" % (dataset.path, "../test_images/" + x_n)
-            else:
-                script += " --dataset_path %s --output_path %s" % ("../test_images/" + x_n, "../test_images/" + x_n)
-            print(script)
-            os.system(script)
-    # else:
-    #     resize_img(dataset, x_n)
-
-
 def get_output_layout(mt_result):
     img_list = os.listdir("test_images/" + mt_result[2])
     img_list.sort()
@@ -304,7 +270,6 @@ def pipeline(values, generator_list, model_list, data_list,
             # if not is_set:
                 # return False, "No transformation engine supports the input rule", None, None, None
             clear_test_images()
-            print(work_engine.generator)
             work_engine.apply_transform(target_object[0], target_transformation[0], target_parameter[0], selected_dataset['path'],
                                     selected_dataset['semantic_path'], 'test_images')
 
@@ -398,9 +363,9 @@ def pipeline(values, generator_list, model_list, data_list,
                 violation_record.append(0)
 
         print(violation, total)
-        img_list = os.listdir("test_images/x_n2")
+        img_list = os.listdir("test_images/x_n1")
         img_list.sort()
-        # img_list = img_list[1:] # remove .gitignore
+        img_list = img_list[1:] # remove .gitignore
         df = pd.DataFrame({"Image name": img_list, "Original pred": pred_x1, "Transformed pred": pred_x2})
         df.to_csv(compare_image_folder + ".csv")
         if os.path.exists(compare_image_folder):

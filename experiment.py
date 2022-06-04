@@ -4,7 +4,6 @@ from engine import Engine
 import torch
 import time
 from rmt_prototype import clear_test_images, pipeline, make_prediction_steer
-from xml_parser import parse_new
 import pandas as pd
 import os
 from model_a2d2 import EpochSingle
@@ -50,42 +49,42 @@ def rule_evaluation(rule, test_models, compare_image_folder, gen_image=True):
     # rule_evaluation(rule_2, test_models, 'verification_rule_2', gen_image=gen_image)
 
 
-def run_1_eval(gen_image=True):
+def rule_1_eval(gen_image=True):
     print("Rule 1")
-    rule_1 = "If: a pedestrian is added on roadside\nThen: speed of ego-vehicle should decrease\nIf:\nThen:"
+    rule_1 = "If: a pedestrian appears on the roadside\nThen: the ego-vehicle should slow down.\nIf:\nThen:"
     test_models = ["Epoch(speed)", "VGG16(speed)", "Resnet101(speed)"]
     rule_evaluation(rule_1, test_models, 'verification_rule_1', gen_image=gen_image)
 
-def run_2_eval(gen_image=True):
+def rule_2_eval(gen_image=True):
     print("Rule 2")
-    rule_2 = "If: a slow speed sign is added on roadside\nThen: speed of ego-vehicle should decrease\nIf:\nThen:"
+    rule_2 = "If: a speed limit sign appears on the roadside\nThen: the ego-vehicle should slow down.\nIf:\nThen:"
     test_models = ["Epoch(speed)", "VGG16(speed)", "Resnet101(speed)"]
     rule_evaluation(rule_2, test_models, 'verification_rule_2', gen_image=gen_image)
 
-def rule_3_eval(gen_image=True):
-    rule = "If: the driving time changes into night\nThen: speed of ego-vehicle should decrease\nIf:\nThen:"
+def rule_7_eval(gen_image=True):
+    rule = "If: the driving time changes into night,\nThen: the ego-vehicle should slow down.\nIf:\nThen:"
     test_models = ["Epoch(speed)", "VGG16(speed)", "Resnet101(speed)"]
     rule_evaluation(rule, test_models, 'validation_rule_1', gen_image=gen_image)
 
-def rule_4_eval():
-    rule = "If: a pedestrian is added on roadside\nThen: speed of ego-vehicle should decrease at least 30%\nIf:\nThen:"
+def rule_3_eval():
+    rule = "If:a pedestrian appears on the roadside\nThen: the ego-vehicle should slow down at least 30%.\nIf:\nThen:"
     test_models = ["Epoch(speed)", "VGG16(speed)", "Resnet101(speed)"]
     rule_evaluation(rule, test_models, 'validation_rule_2', gen_image=False)
 
-def rule_5_eval(gen_image=True):
-    rule = "If: a pedestrian is added on roadside\n Then: the speed of ego-vehicle should decrease.\n" \
-           "If: the pedestrian is added closer to the ego-vehicle\n" \
-           "Then: the speed of ego-vehicle should decrease more."
+def rule_4_eval(gen_image=True):
+    rule = "If: a pedestrian appears on the roadside,\n Then:  the ego-vehicle should slow down.\n" \
+           "If: he gets closer to the ego-vehicle.\n" \
+           "Then: the speed should decrease more."
     test_models = ["Epoch(speed)", "VGG16(speed)", "Resnet101(speed)"]
     rule_evaluation(rule, test_models, 'validation_rule_3', gen_image=gen_image)
 
-def rule_6_eval(gen_image=True):
+def rule_5_eval(gen_image=True):
     rule = "If: lane lines on the road are removed,\nThen: the steering angle of ego-vehicle should keep same.\nIf:" \
            "\nThen:"
     test_models = ["Epoch(steer)", "VGG16(steer)", "Resnet101(steer)"]
     rule_evaluation(rule, test_models, 'validation_rule_4', gen_image=gen_image)
 
-def rule_7_eval(gen_image=True):
+def rule_6_eval(gen_image=True):
     rule = "If: the buildings is replaced with trees,\n" \
            "Then: the steering angle of ego-vehicle should keep same.\nIf:\nThen:"
     test_models = ["Epoch(steer)", "VGG16(steer)", "Resnet101(steer)"]
@@ -493,7 +492,7 @@ if __name__ == '__main__':
     # run_1_eval(gen_image=True)
 
     # sensitivity_exp()
-    rule_3_eval(gen_image=True)
+    rule_1_eval(gen_image=True)
     # run_2_eval()
     # rule_3_eval()
     # rule_4_eval()
